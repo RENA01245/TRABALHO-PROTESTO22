@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: Sistema de Controle de Protestos API
+  version: 1.0.0
+paths:
+  /api/auth/login:
+    post:
+      summary: Login with e-mail and password
+      responses:
+        "200":
+          description: Authenticated user and JWT
+  /api/dashboard:
+    get:
+      summary: Dashboard indicators
+      responses:
+        "200":
+          description: Dashboard totals
+  /api/imports/protests:
+    post:
+      summary: Import protests file
+      responses:
+        "201":
+          description: Import batch result
+  /api/protests:
+    get:
+      summary: List protests with filters
+      responses:
+        "200":
+          description: Protest list
+  /api/protests/{id}:
+    get:
+      summary: Protest details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Protest details
+  /api/protests/{id}/client-payment:
+    post:
+      summary: Mark client payment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Updated protest
+  /api/protests/{id}/boleto:
+    post:
+      summary: Inform boleto data
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Updated protest
+  /api/protests/{id}/boleto-paid:
+    post:
+      summary: Mark boleto as paid
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Updated protest
+  /api/boletos/pending:
+    get:
+      summary: List pending boletos for chefe
+      responses:
+        "200":
+          description: Pending boleto list
+  /api/reports/summary:
+    get:
+      summary: Simple summary report
+      responses:
+        "200":
+          description: Report summary
+  /api/reports/export.csv:
+    get:
+      summary: Export protests report as CSV
+      responses:
+        "200":
+          description: CSV file
