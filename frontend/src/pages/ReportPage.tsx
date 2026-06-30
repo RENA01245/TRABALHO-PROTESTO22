@@ -1,11 +1,24 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
+import { getMockProtests } from "../api/mock";
 
 export function ReportPage() {
   const [report, setReport] = useState<any>(null);
 
   useEffect(() => {
-    api.get("/reports/summary").then((response) => setReport(response.data));
+    api.get("/reports/summary").then((response) => setReport(response.data)).catch(() => {
+      const protests = getMockProtests();
+      setReport({
+        pendingBoletos: protests.filter((item) => item.clientPaid && item.boletoRequired && !item.boletoPaid).length,
+        paidBoletos: protests.filter((item) => item.boletoPaid).length,
+        clientPaid: protests.filter((item) => item.clientPaid).length,
+        protested: protests.filter((item) => item.protestStatus === "PROTESTADO").length,
+        byStatus: Object.entries(protests.reduce<Record<string, number>>((acc, item) => {
+          acc[item.protestStatus] = (acc[item.protestStatus] ?? 0) + 1;
+          return acc;
+        }, {})).map(([protestStatus, total]) => ({ protestStatus, _count: { _all: total } }))
+      });
+    });
   }, []);
 
   function exportCsv() {

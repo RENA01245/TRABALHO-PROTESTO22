@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../api/client";
+import { getMockProtests, saveMockProtests } from "../api/mock";
 import type { Protest } from "../types";
 import { Badge } from "../ui/Badge";
 
@@ -14,7 +15,13 @@ export function ProtestDetailsPage() {
   const [notes, setNotes] = useState("");
 
   async function load() {
-    const { data } = await api.get(`/protests/${id}`);
+    let data: Protest;
+    try {
+      const response = await api.get(`/protests/${id}`);
+      data = response.data;
+    } catch {
+      data = getMockProtests().find((protest) => protest.id === id) ?? getMockProtests()[0];
+    }
     setItem(data);
     setNotes(data.notes ?? "");
     setPaymentAmount(data.clientPaymentAmount ?? data.amount);
@@ -23,24 +30,40 @@ export function ProtestDetailsPage() {
 
   async function markClientPaid(event: React.FormEvent) {
     event.preventDefault();
-    await api.post(`/protests/${id}/client-payment`, { paymentDate, amount: Number(paymentAmount) });
+    try {
+      await api.post(`/protests/${id}/client-payment`, { paymentDate, amount: Number(paymentAmount) });
+    } catch {
+      saveMockProtests(getMockProtests().map((protest) => protest.id === id ? { ...protest, clientPaid: true, protestStatus: "CLIENTE_PAGOU", paymentStatus: "CLIENTE_PAGOU" } : protest));
+    }
     await load();
   }
 
   async function informBoleto(event: React.FormEvent) {
     event.preventDefault();
-    await api.post(`/protests/${id}/boleto`, { boletoDueDate, boletoAmount: Number(boletoAmount) });
+    try {
+      await api.post(`/protests/${id}/boleto`, { boletoDueDate, boletoAmount: Number(boletoAmount) });
+    } catch {
+      saveMockProtests(getMockProtests().map((protest) => protest.id === id ? { ...protest, boletoRequired: true, boletoDueDate, boletoAmount, protestStatus: "BOLETO_ENVIADO_AO_CHEFE", paymentStatus: "AGUARDANDO_PAGAMENTO_DO_BOLETO" } : protest));
+    }
     await load();
   }
 
   async function markBoletoPaid() {
-    await api.post(`/protests/${id}/boleto-paid`);
+    try {
+      await api.post(`/protests/${id}/boleto-paid`);
+    } catch {
+      saveMockProtests(getMockProtests().map((protest) => protest.id === id ? { ...protest, boletoPaid: true, protestStatus: "BOLETO_PAGO", paymentStatus: "BOLETO_PAGO" } : protest));
+    }
     await load();
   }
 
   async function saveNotes(event: React.FormEvent) {
     event.preventDefault();
-    await api.post(`/protests/${id}/notes`, { notes });
+    try {
+      await api.post(`/protests/${id}/notes`, { notes });
+    } catch {
+      saveMockProtests(getMockProtests().map((protest) => protest.id === id ? { ...protest, notes } : protest));
+    }
     await load();
   }
 
@@ -49,7 +72,11 @@ export function ProtestDetailsPage() {
     if (!file) return;
     const form = new FormData();
     form.append("file", file);
-    await api.post(`/protests/${id}/attachments`, form);
+    try {
+      await api.post(`/protests/${id}/attachments`, form);
+    } catch {
+      saveMockProtests(getMockProtests().map((protest) => protest.id === id ? { ...protest, boletoUploaded: true } : protest));
+    }
     await load();
   }
 

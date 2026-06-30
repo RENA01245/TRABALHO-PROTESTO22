@@ -16,6 +16,7 @@ export type Protest = {
   protestStatus: string;
   paymentStatus: string;
   clientPaid: boolean;
+  clientPaymentAmount?: string;
   boletoRequired: boolean;
   boletoUploaded: boolean;
   boletoDueDate?: string;

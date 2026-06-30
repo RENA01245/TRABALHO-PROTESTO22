@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/client";
+import { getMockProtests } from "../api/mock";
 import type { Protest } from "../types";
 import { Badge } from "../ui/Badge";
 import { EmptyState } from "../ui/EmptyState";
@@ -11,8 +12,17 @@ export function ProtestsPage() {
 
   async function load() {
     const params = Object.fromEntries(Object.entries(filters).filter(([, value]) => value));
-    const { data } = await api.get("/protests", { params });
-    setItems(data);
+    try {
+      const { data } = await api.get("/protests", { params });
+      setItems(data);
+    } catch {
+      setItems(getMockProtests().filter((item) =>
+        (!filters.protocol || item.protocol.includes(filters.protocol)) &&
+        (!filters.debtor || item.debtor.name.toLowerCase().includes(filters.debtor.toLowerCase())) &&
+        (!filters.document || item.debtor.document.includes(filters.document)) &&
+        (!filters.status || item.protestStatus === filters.status)
+      ));
+    }
   }
 
   useEffect(() => { load(); }, []);

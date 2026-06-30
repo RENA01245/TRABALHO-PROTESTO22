@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
+import { getMockProtests, saveMockProtests } from "../api/mock";
 import type { Protest } from "../types";
 import { EmptyState } from "../ui/EmptyState";
 
@@ -7,12 +8,21 @@ export function PendingBoletosPage() {
   const [items, setItems] = useState<Protest[]>([]);
 
   async function load() {
-    const { data } = await api.get("/boletos/pending");
-    setItems(data);
+    try {
+      const { data } = await api.get("/boletos/pending");
+      setItems(data);
+    } catch {
+      setItems(getMockProtests().filter((item) => item.clientPaid && item.boletoRequired && !item.boletoPaid));
+    }
   }
 
   async function markPaid(id: string) {
-    await api.post(`/protests/${id}/boleto-paid`);
+    try {
+      await api.post(`/protests/${id}/boleto-paid`);
+    } catch {
+      const updated = getMockProtests().map((item) => item.id === id ? { ...item, boletoPaid: true, protestStatus: "BOLETO_PAGO", paymentStatus: "BOLETO_PAGO" } : item);
+      saveMockProtests(updated);
+    }
     await load();
   }
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
+import { mockDashboard } from "../api/mock";
 
 type Dashboard = Record<"total" | "clientPaid" | "pendingBoletos" | "paidBoletos" | "pending" | "protested" | "canceled" | "importedToday", number>;
 
@@ -18,7 +19,7 @@ export function DashboardPage() {
   const [data, setData] = useState<Dashboard | null>(null);
 
   useEffect(() => {
-    api.get("/dashboard").then((response) => setData(response.data));
+    api.get("/dashboard").then((response) => setData(response.data)).catch(() => setData(mockDashboard));
   }, []);
 
   return (
