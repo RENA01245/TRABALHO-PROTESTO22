@@ -1,0 +1,4 @@
+protocolo,numero_titulo,nome_devedor,documento_devedor,tipo_documento_devedor,nome_credor,documento_credor,tipo_documento_credor,valor,data_vencimento,data_apresentacao,status
+202500001,TIT001,Joao da Silva,12345678909,CPF,Empresa Exemplo LTDA,12345678000195,CNPJ,350.00,2025-05-10,2025-05-15,IMPORTADO
+202500002,TIT002,Maria Souza,98765432100,CPF,Comercial Alfa LTDA,11222333000181,CNPJ,480.75,2025-05-12,2025-05-16,AGUARDANDO_CLIENTE
+202500003,TIT003,Carlos Pereira,11144477735,CPF,Servicos Beta LTDA,44555666000128,CNPJ,1200.00,2025-05-20,2025-05-22,BOLETO_PENDENTE

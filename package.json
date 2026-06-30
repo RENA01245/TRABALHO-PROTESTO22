@@ -1,0 +1,16 @@
+{
+  "name": "sistema-controle-protestos",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --workspaces --ignore-scripts",
+    "dev": "npm run dev --workspace backend",
+    "build": "npm run build --workspace backend && npm run build --workspace frontend",
+    "prisma:generate": "npm run prisma:generate --workspace backend",
+    "seed": "npm run seed --workspace backend"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ]
+}

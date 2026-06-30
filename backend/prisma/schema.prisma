@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  FUNCIONARIO
+  CHEFE
+  ADMIN
+}
+
+enum DocumentType {
+  CPF
+  CNPJ
+}
+
+enum ImportStatus {
+  PROCESSADO
+  COM_ERROS
+}
+
+enum ProtestStatus {
+  IMPORTADO
+  EM_ANALISE
+  AGUARDANDO_CLIENTE
+  CLIENTE_PAGOU
+  BOLETO_PENDENTE
+  BOLETO_ENVIADO_AO_CHEFE
+  BOLETO_PAGO
+  PENDENTE
+  PROTESTADO
+  CANCELADO
+  DEVOLVIDO
+}
+
+enum PaymentStatus {
+  NAO_PAGO
+  CLIENTE_PAGOU
+  AGUARDANDO_PAGAMENTO_DO_BOLETO
+  BOLETO_PAGO
+  PENDENTE_CONFIRMACAO
+}
+
+model User {
+  id          String               @id @default(uuid())
+  name        String
+  email       String               @unique
+  passwordHash String
+  role        UserRole
+  active      Boolean              @default(true)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  imports     ImportBatch[]
+  histories   ProtestHistory[]
+  attachments ProtestAttachment[]
+  paidBoletos Protest[]            @relation("BoletoPaidBy")
+}
+
+model ImportBatch {
+  id           String       @id @default(uuid())
+  filename     String
+  status       ImportStatus
+  totalRows    Int
+  importedRows Int
+  errorRows    Int
+  createdById  String
+  createdAt    DateTime     @default(now())
+  createdBy    User         @relation(fields: [createdById], references: [id])
+  errors       ImportError[]
+  protests     Protest[]
+}
+
+model ImportError {
+  id            String      @id @default(uuid())
+  importBatchId String
+  rowNumber     Int
+  message       String
+  rawData       Json
+  createdAt     DateTime    @default(now())
+  importBatch   ImportBatch @relation(fields: [importBatchId], references: [id])
+}
+
+model Debtor {
+  id           String       @id @default(uuid())
+  name         String
+  document     String
+  documentType DocumentType
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  protests     Protest[]
+
+  @@unique([document, documentType])
+}
+
+model Creditor {
+  id           String       @id @default(uuid())
+  name         String
+  document     String
+  documentType DocumentType
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  protests     Protest[]
+
+  @@unique([document, documentType])
+}
+
+model Protest {
+  id                  String               @id @default(uuid())
+  protocol            String               @unique
+  titleNumber         String
+  debtorId            String
+  creditorId          String?
+  importBatchId       String?
+  amount              Decimal              @db.Decimal(12, 2)
+  dueDate             DateTime
+  presentationDate    DateTime?
+  protestStatus       ProtestStatus        @default(IMPORTADO)
+  paymentStatus       PaymentStatus        @default(NAO_PAGO)
+  clientPaid          Boolean              @default(false)
+  clientPaymentDate   DateTime?
+  clientPaymentAmount Decimal?             @db.Decimal(12, 2)
+  boletoRequired      Boolean              @default(false)
+  boletoUploaded      Boolean              @default(false)
+  boletoDueDate       DateTime?
+  boletoAmount        Decimal?             @db.Decimal(12, 2)
+  boletoPaid          Boolean              @default(false)
+  boletoPaidAt        DateTime?
+  boletoPaidById      String?
+  notes               String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  debtor              Debtor               @relation(fields: [debtorId], references: [id])
+  creditor            Creditor?            @relation(fields: [creditorId], references: [id])
+  importBatch         ImportBatch?         @relation(fields: [importBatchId], references: [id])
+  boletoPaidBy        User?                @relation("BoletoPaidBy", fields: [boletoPaidById], references: [id])
+  attachments         ProtestAttachment[]
+  histories           ProtestHistory[]
+  paymentInfo         PaymentInfo?
+}
+
+model ProtestAttachment {
+  id           String   @id @default(uuid())
+  protestId    String
+  filename     String
+  originalName String
+  mimeType     String
+  path         String
+  createdById  String
+  createdAt    DateTime @default(now())
+  protest      Protest  @relation(fields: [protestId], references: [id])
+  createdBy    User     @relation(fields: [createdById], references: [id])
+}
+
+model ProtestHistory {
+  id          String   @id @default(uuid())
+  protestId   String
+  userId      String
+  action      String
+  fromStatus  String?
+  toStatus    String?
+  description String
+  createdAt   DateTime @default(now())
+  protest     Protest  @relation(fields: [protestId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model PaymentInfo {
+  id                  String    @id @default(uuid())
+  protestId           String    @unique
+  clientPaymentDate   DateTime?
+  clientPaymentAmount Decimal?  @db.Decimal(12, 2)
+  boletoDueDate       DateTime?
+  boletoAmount        Decimal?  @db.Decimal(12, 2)
+  boletoPaidAt        DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  protest             Protest   @relation(fields: [protestId], references: [id])
+}
