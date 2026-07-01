@@ -1,16 +1,53 @@
 # Sistema de Controle de Protestos e Repasse de Pagamentos
 
-Aplicação acadêmica criada com metodologia SDD - Spec-Driven Development e fluxo Spec Kit.
+Sistema web academico desenvolvido com **SDD - Spec-Driven Development** usando o fluxo **GitHub Spec Kit**.
 
-O sistema resolve um problema real de controle interno: quando um cliente paga, o funcionário registra o pagamento, informa ou anexa o boleto correspondente, e o chefe visualiza os boletos pendentes para pagamento.
+O projeto resolve um problema real de controle interno: quando um cliente paga, o funcionario registra o pagamento, informa o boleto correspondente e o chefe visualiza quais boletos ainda precisam ser pagos.
 
 ## Links
 
-- Repositório GitHub: https://github.com/RENA01245/TRABALHO-PROTESTO22
-- Sistema publicado: **(A DEFINIR)**
-- Back-end publicado: **(A DEFINIR)**
+- Repositorio GitHub: [RENA01245/TRABALHO-PROTESTO22](https://github.com/RENA01245/TRABALHO-PROTESTO22)
+- Sistema publicado na Vercel: **adicione aqui o link final da Vercel**
+- API: `/api`
 
-## Metodologia SDD
+## Objetivo
+
+Permitir que funcionario, chefe e administrador acompanhem protestos, pagamentos de clientes, boletos pendentes e historico das alteracoes de forma simples, visual e adequada para apresentacao academica.
+
+O foco principal do dashboard e destacar o que precisa de atencao, especialmente **boletos pendentes para pagamento do chefe**.
+
+## Usuarios Demo
+
+Todos usam a senha:
+
+```text
+123456
+```
+
+| Perfil | E-mail |
+| --- | --- |
+| Funcionario | `funcionario@demo.com` |
+| Chefe | `chefe@demo.com` |
+| Administrador | `admin@demo.com` |
+
+## Principais Funcionalidades
+
+- Login com JWT.
+- Controle de acesso por perfil.
+- Dashboard com indicadores.
+- Destaque para boletos pendentes.
+- Importacao de protestos por CSV.
+- Listagem e filtros de protestos.
+- Detalhes do protesto.
+- Registro de pagamento do cliente.
+- Informacao de boleto para o chefe.
+- Marcacao de boleto como pago.
+- Historico de alteracoes.
+- Relatorio simples.
+- Exportacao CSV.
+- Modo demo visual quando a API nao estiver disponivel.
+
+## Metodologia SDD e Spec Kit
 
 O projeto segue as etapas:
 
@@ -20,27 +57,32 @@ O projeto segue as etapas:
 4. Tasks
 5. Implement
 
-Documentos obrigatórios:
+Arquivos principais do Spec Kit:
 
-- `.specify/memory/constitution.md`
-- `specs/001-controle-protestos/spec.md`
-- `specs/001-controle-protestos/plan.md`
-- `specs/001-controle-protestos/tasks.md`
-
-A pasta `.specify/` e a feature `specs/001-controle-protestos/` foram criadas com o GitHub Spec Kit.
+```text
+.specify/memory/constitution.md
+specs/001-controle-protestos/spec.md
+specs/001-controle-protestos/plan.md
+specs/001-controle-protestos/tasks.md
+specs/001-controle-protestos/research.md
+specs/001-controle-protestos/data-model.md
+specs/001-controle-protestos/quickstart.md
+specs/001-controle-protestos/contracts/openapi.yaml
+```
 
 ## Tecnologias
 
-Front-end:
+### Frontend
 
 - React
 - TypeScript
 - Vite
 - React Router
 - Axios
+- Lucide React
 - CSS responsivo
 
-Back-end:
+### Backend
 
 - Node.js
 - Express
@@ -51,69 +93,46 @@ Back-end:
 - Multer
 - Zod
 
-Banco e deploy:
+### Banco e Deploy
 
 - PostgreSQL no Supabase
-- Front-end na Vercel
-- Back-end na Render
+- Frontend e API na Vercel
+- Prisma migrations
+- Seed de usuarios demo
 
-## Estrutura
+## Estrutura do Projeto
 
 ```text
+api/
 backend/
 frontend/
+scripts/
+specs/
+.specify/
+DEPLOY.md
 README.md
-.gitignore
+package.json
+vercel.json
 ```
-
-## Funcionalidades
-
-- Login com JWT.
-- Controle de perfil: funcionário, chefe e administrador.
-- Importação de protestos por CSV.
-- Validação de arquivo importado.
-- Listagem e filtros de protestos.
-- Detalhes do protesto.
-- Registro de pagamento do cliente.
-- Informação e anexo de boleto.
-- Tela de boletos pendentes para o chefe.
-- Marcação de boleto como pago.
-- Histórico de alterações.
-- Dashboard com indicadores.
-- Relatório simples e exportação CSV.
 
 ## Como Rodar Localmente
 
-Instale as dependências:
+Instale as dependencias:
 
 ```bash
 npm install --workspaces --ignore-scripts
 ```
 
-Configure o back-end:
-
-```bash
-cd backend
-cp .env.example .env
-```
-
-Edite `backend/.env`:
+Crie `backend/.env`:
 
 ```env
-DATABASE_URL="postgresql://postgres:senha@host:5432/postgres"
-JWT_SECRET="troque-este-segredo"
+DATABASE_URL="postgresql://postgres:SENHA@db.dmkyohnbmgmjcdsdqgyo.supabase.co:5432/postgres"
+JWT_SECRET="uma-frase-secreta-grande"
 PORT=3333
 CORS_ORIGIN="http://localhost:5173"
 ```
 
-Configure o front-end:
-
-```bash
-cd frontend
-cp .env.example .env
-```
-
-Edite `frontend/.env`:
+Crie `frontend/.env` se quiser sobrescrever a API local:
 
 ```env
 VITE_API_URL="http://localhost:3333/api"
@@ -125,37 +144,29 @@ Gere o Prisma Client:
 npm run prisma:generate --workspace backend
 ```
 
-Crie as tabelas:
+Rode migrations:
 
 ```bash
 npm run prisma:migrate --workspace backend
 ```
 
-Crie usuários demo:
+Crie usuarios demo:
 
 ```bash
 npm run seed --workspace backend
 ```
 
-Execute o back-end:
+Execute o backend:
 
 ```bash
 npm run dev --workspace backend
 ```
 
-Execute o front-end:
+Execute o frontend:
 
 ```bash
 npm run dev --workspace frontend
 ```
-
-## Usuários Demo
-
-Todos usam a senha `123456`.
-
-- Funcionário: `funcionario@demo.com`
-- Chefe: `chefe@demo.com`
-- Administrador: `admin@demo.com`
 
 ## Modelo CSV
 
@@ -171,46 +182,49 @@ Campos:
 protocolo,numero_titulo,nome_devedor,documento_devedor,tipo_documento_devedor,nome_credor,documento_credor,tipo_documento_credor,valor,data_vencimento,data_apresentacao,status
 ```
 
-## Configuração do Supabase
+## Deploy na Vercel
 
-1. Criar projeto no Supabase.
-2. Copiar a connection string PostgreSQL.
-3. Configurar `DATABASE_URL` no arquivo `.env` e na Render.
-4. Rodar migrations pelo Prisma.
-5. Rodar seed para criar usuários demo.
+O projeto esta preparado para publicar frontend e backend na Vercel.
 
-## Deploy
+Configuracao:
 
-Guia completo em `DEPLOY.md`.
+```text
+Root Directory: ./
+Build Command: npm run build
+Output Directory: dist
+```
 
-O projeto está preparado para subir frontend e backend na Vercel:
+Variaveis de ambiente na Vercel:
 
-- Root directory: `./`
-- Build command: `npm run build`
-- Output directory: `dist`
-- API: `/api/*`
+```env
+DATABASE_URL="postgresql://postgres:SENHA_CODIFICADA@db.dmkyohnbmgmjcdsdqgyo.supabase.co:5432/postgres"
+JWT_SECRET="uma-frase-secreta-grande"
+CORS_ORIGIN="http://localhost:5173,https://SEU-PROJETO.vercel.app"
+```
 
-Variáveis necessárias na Vercel: `DATABASE_URL`, `JWT_SECRET` e `CORS_ORIGIN`.
+Nao e necessario configurar `VITE_API_URL` na Vercel, pois o frontend usa `/api` no mesmo dominio.
+
+Mais detalhes em [DEPLOY.md](DEPLOY.md).
 
 ## Fluxo Principal de Aceite
 
-1. Funcionário faz login.
-2. Funcionário importa arquivo de protestos.
+1. Funcionario faz login.
+2. Funcionario importa arquivo de protestos.
 3. Sistema mostra protestos importados.
-4. Funcionário abre um protesto.
-5. Funcionário marca que o cliente pagou.
-6. Funcionário anexa ou informa boleto.
+4. Funcionario abre um protesto.
+5. Funcionario marca que o cliente pagou.
+6. Funcionario informa boleto.
 7. Sistema coloca o item em boletos pendentes.
 8. Chefe faz login.
 9. Chefe acessa boletos pendentes.
 10. Chefe marca boleto como pago.
-11. Sistema atualiza status.
-12. Sistema registra histórico.
-13. Dashboard atualiza indicadores.
+11. Sistema atualiza o status.
+12. Sistema registra historico.
+13. Dashboard atualiza os indicadores.
 
-## Prints
+## Observacoes
 
-- Tela de login: **(A DEFINIR)**
-- Dashboard: **(A DEFINIR)**
-- Importação: **(A DEFINIR)**
-- Boletos pendentes: **(A DEFINIR)**
+- O sistema nao e um sistema completo de cartorio.
+- Regras juridicas nao informadas ficam como **(A DEFINIR)**.
+- O arquivo `.env` nao deve ser publicado no GitHub.
+- A senha do banco deve ficar apenas nas variaveis de ambiente locais ou da Vercel.
