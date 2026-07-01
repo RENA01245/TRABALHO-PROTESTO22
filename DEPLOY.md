@@ -25,7 +25,7 @@ O arquivo `vercel.json` já define:
 ```text
 Install Command: npm install --ignore-scripts
 Build Command: npm run build
-Output Directory: frontend/dist
+Output Directory: dist
 API: /api/*
 ```
 

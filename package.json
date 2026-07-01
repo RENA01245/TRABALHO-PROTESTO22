@@ -5,7 +5,7 @@
   "scripts": {
     "install:all": "npm install --workspaces --ignore-scripts",
     "dev": "npm run dev --workspace backend",
-    "build": "npm run build --workspace backend && npm run build --workspace frontend",
+    "build": "npm run build --workspace backend && npm run build --workspace frontend && node scripts/copy-frontend-dist.mjs",
     "prisma:generate": "npm run prisma:generate --workspace backend",
     "seed": "npm run seed --workspace backend"
   },

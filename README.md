@@ -187,7 +187,7 @@ O projeto está preparado para subir frontend e backend na Vercel:
 
 - Root directory: `./`
 - Build command: `npm run build`
-- Output directory: `frontend/dist`
+- Output directory: `dist`
 - API: `/api/*`
 
 Variáveis necessárias na Vercel: `DATABASE_URL`, `JWT_SECRET` e `CORS_ORIGIN`.
