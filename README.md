@@ -186,6 +186,8 @@ protocolo,numero_titulo,nome_devedor,documento_devedor,tipo_documento_devedor,no
 
 ## Deploy
 
+Guia completo em `DEPLOY.md`.
+
 Front-end na Vercel:
 
 - Root directory: `frontend`
