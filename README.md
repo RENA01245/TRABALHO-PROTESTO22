@@ -183,19 +183,14 @@ protocolo,numero_titulo,nome_devedor,documento_devedor,tipo_documento_devedor,no
 
 Guia completo em `DEPLOY.md`.
 
-Front-end na Vercel:
+O projeto está preparado para subir frontend e backend na Vercel:
 
-- Root directory: `frontend`
+- Root directory: `./`
 - Build command: `npm run build`
-- Output directory: `dist`
-- Variável: `VITE_API_URL`
+- Output directory: `frontend/dist`
+- API: `/api/*`
 
-Back-end na Render:
-
-- Root directory: `backend`
-- Build command: `npm install --ignore-scripts && npm run prisma:generate && npm run build`
-- Start command: `npm start`
-- Variáveis: `DATABASE_URL`, `JWT_SECRET`, `PORT`, `CORS_ORIGIN`
+Variáveis necessárias na Vercel: `DATABASE_URL`, `JWT_SECRET` e `CORS_ORIGIN`.
 
 ## Fluxo Principal de Aceite
 

@@ -1,70 +1,61 @@
-# Deploy
+# Deploy na Vercel
 
-## 1. Banco Supabase
+Este projeto está preparado para subir **frontend e backend na Vercel**.
 
-O banco já usa PostgreSQL no Supabase. A variável necessária para o back-end é:
+- Frontend: React/Vite em `frontend/`
+- Backend: Express como função serverless em `api/index.ts`
+- Banco: Supabase PostgreSQL
 
-```env
-DATABASE_URL="postgresql://postgres:SENHA@db.dmkyohnbmgmjcdsdqgyo.supabase.co:5432/postgres"
-```
+## Configuração na Vercel
 
-Não coloque essa variável no GitHub.
-
-## 2. Back-end na Render
-
-Crie um Web Service a partir do repositório `RENA01245/TRABALHO-PROTESTO22`.
-
-Configuração:
+Importe o repositório:
 
 ```text
-Root Directory: backend
-Build Command: npm install --ignore-scripts && npm run build
-Start Command: npm start
-Health Check Path: /api/health
+RENA01245/TRABALHO-PROTESTO22
 ```
 
-Variáveis:
+Use a raiz do repositório como projeto:
+
+```text
+Root Directory: ./
+```
+
+O arquivo `vercel.json` já define:
+
+```text
+Install Command: npm install --ignore-scripts
+Build Command: npm run build
+Output Directory: frontend/dist
+API: /api/*
+```
+
+## Variáveis de ambiente na Vercel
+
+Configure em **Settings > Environment Variables**:
 
 ```env
-DATABASE_URL="postgresql://..."
+DATABASE_URL="postgresql://postgres:SENHA_CODIFICADA@db.dmkyohnbmgmjcdsdqgyo.supabase.co:5432/postgres"
 JWT_SECRET="uma-frase-secreta-grande"
 CORS_ORIGIN="http://localhost:5173,https://SEU-PROJETO.vercel.app"
-NODE_ENV="production"
 ```
 
-Depois do primeiro deploy, rode o seed no Shell da Render, se necessário:
+`VITE_API_URL` não é obrigatório neste modelo, porque o frontend usa `/api` no mesmo domínio da Vercel.
+
+## Rotas
+
+- Site: `https://SEU-PROJETO.vercel.app`
+- API health: `https://SEU-PROJETO.vercel.app/api/health`
+- Login: `https://SEU-PROJETO.vercel.app/api/auth/login`
+
+## Seed
+
+O banco já foi migrado e populado localmente. Se precisar rodar seed novamente, faça localmente apontando para o Supabase:
 
 ```bash
-npm run seed
+npm run seed --workspace backend
 ```
 
-## 3. Front-end na Vercel
-
-Importe o mesmo repositório.
-
-Configuração:
-
-```text
-Framework Preset: Vite
-Root Directory: frontend
-Build Command: npm run build
-Output Directory: dist
-```
-
-Variável:
-
-```env
-VITE_API_URL="https://SEU-BACKEND.onrender.com/api"
-```
-
-## 4. Ordem Recomendada
-
-1. Publicar back-end na Render.
-2. Copiar a URL da Render.
-3. Configurar `VITE_API_URL` na Vercel.
-4. Publicar front-end na Vercel.
-5. Voltar na Render e ajustar `CORS_ORIGIN` com a URL final da Vercel.
-6. Testar login:
+## Usuários demo
 
 ```text
 funcionario@demo.com / 123456
