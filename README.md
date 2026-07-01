@@ -26,10 +26,6 @@ Documentos obrigatórios:
 - `specs/001-controle-protestos/spec.md`
 - `specs/001-controle-protestos/plan.md`
 - `specs/001-controle-protestos/tasks.md`
-- `docs/constitution.md`
-- `docs/schema.md`
-- `docs/plan.md`
-- `docs/tasks.md`
 
 A pasta `.specify/` e a feature `specs/001-controle-protestos/` foram criadas com o GitHub Spec Kit.
 
@@ -66,7 +62,6 @@ Banco e deploy:
 ```text
 backend/
 frontend/
-docs/
 README.md
 .gitignore
 ```

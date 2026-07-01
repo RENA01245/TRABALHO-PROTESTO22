@@ -12,7 +12,7 @@ All meaningful work must follow the Spec Kit flow:
 4. Tasks
 5. Implement
 
-Feature specifications must live under `specs/`. Academic deliverables may also be mirrored under `docs/`.
+Feature specifications must live under `specs/`.
 
 ### II. Real Problem Scope
 
@@ -47,7 +47,6 @@ The repository is a web application with:
 - `backend/`: REST API and database access.
 - `frontend/`: React site and demo interface.
 - `specs/`: official Spec Kit feature documentation.
-- `docs/`: academic documentation required by the assignment.
 
 ## Development Workflow
 

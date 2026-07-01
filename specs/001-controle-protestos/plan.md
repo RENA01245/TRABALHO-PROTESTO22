@@ -38,7 +38,7 @@ The implementation uses a React/TypeScript front-end, Node.js/Express/TypeScript
 
 - SDD flow followed: Constitution, Specify, Plan, Tasks, Implement.
 - Official Spec Kit structure present under `.specify/` and `specs/001-controle-protestos/`.
-- Required academic documents preserved under `docs/`.
+- Academic documentation is preserved in the official Spec Kit feature directory under `specs/001-controle-protestos/`.
 - Scope is limited to internal tracking of protests, client payment, boleto handoff and history.
 - Technology rules satisfied: React, Node.js, TypeScript, PostgreSQL/Supabase, Prisma, JWT, Bcrypt.
 - Legal domain rule satisfied: unknown legal/cartório rules remain **(A DEFINIR)**.
@@ -88,11 +88,6 @@ frontend/
 │   └── types.ts
 └── index.html
 
-docs/
-├── constitution.md
-├── schema.md
-├── plan.md
-└── tasks.md
 ```
 
 **Structure Decision**: Web application with front-end and back-end at repository root. This matches the academic requirement and keeps deploy simple for Vercel and Render.

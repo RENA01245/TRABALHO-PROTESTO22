@@ -12,7 +12,7 @@
 
 - [x] T001 Create official Spec Kit structure in `.specify/`
 - [x] T002 Create feature directory `specs/001-controle-protestos/`
-- [x] T003 [P] Create academic docs in `docs/`
+- [x] T003 [P] Create academic docs in `specs/001-controle-protestos/`
 - [x] T004 [P] Create monorepo package setup in `package.json`
 - [x] T005 [P] Create `.gitignore` and environment examples
 
